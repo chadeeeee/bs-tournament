@@ -57,7 +57,7 @@ export default function HomePage() {
             <div className="relative bg-card/80 backdrop-blur-xl border-2 border-border rounded-2xl p-6 md:p-8">
               <div className="flex items-center gap-2 mb-6">
                 <Trophy className="w-6 h-6 text-primary" />
-                <h3 className="text-xl font-bold">Registration</h3>
+                <h3 className="text-xl font-bold">Реєстрація</h3>
               </div>
               
               <RegistrationForm onSuccess={() => setShowModal(true)} />
