@@ -76,22 +76,8 @@ export function SuccessModal({ open, onClose }: SuccessModalProps) {
           </h2>
           
           <p className="text-muted-foreground mb-6">
-            Чекаємо на вас на турнірі
+            До зустрчі!
           </p>
-
-          {/* Tournament Info */}
-          <div className="bg-muted/50 rounded-xl p-4 space-y-3">
-            <div className="flex items-center justify-center gap-3 text-foreground">
-              <Calendar className="w-5 h-5 text-primary" />
-              <span className="font-semibold capitalize">{dayName}, {dateStr}</span>
-            </div>
-            <div className="flex items-center justify-center gap-3 text-foreground">
-              <Clock className="w-5 h-5 text-accent" />
-              <span className="font-semibold">15:00</span>
-            </div>
-          </div>
-
-          {/* Action Button */}
           <button
             onClick={onClose}
             className="mt-6 w-full h-12 bg-gradient-to-r from-secondary to-secondary/80 text-secondary-foreground font-bold rounded-xl border-b-4 border-secondary/60 hover:border-b-2 hover:translate-y-0.5 active:border-b-0 active:translate-y-1 transition-all duration-100"
