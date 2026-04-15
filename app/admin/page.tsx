@@ -49,8 +49,7 @@ export default function AdminPage() {
               <Shield className="w-5 h-5 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="font-bold text-lg text-foreground">Admin Panel</h1>
-              <p className="text-xs text-muted-foreground">Brawl Stars Championship</p>
+              <h1 className="font-bold text-lg text-foreground">Адмін панель</h1>
             </div>
           </div>
         </div>
