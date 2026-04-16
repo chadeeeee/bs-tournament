@@ -1,5 +1,4 @@
-// In-memory data store (simulates database)
-// Note: Data will reset on server restart
+import { supabase } from './supabase'
 
 export interface Team {
   name: string
@@ -12,32 +11,58 @@ export interface Participant {
   teams: Team[]
   present: boolean
   createdAt: string
+  ip?: string
 }
 
-// Global store
-const participants: Participant[] = []
+export async function getParticipants(): Promise<Participant[]> {
+  const { data, error } = await supabase
+    .from('participants')
+    .select('*')
+    .order('createdAt', { ascending: false })
 
-export function getParticipants(): Participant[] {
-  return [...participants]
+  if (error) {
+    console.error('Error fetching participants:', error)
+    return []
+  }
+
+  return data as Participant[]
 }
 
-export function addParticipant(className: string, teams: Team[]): Participant {
-  const participant: Participant = {
-    id: crypto.randomUUID(),
+export async function addParticipant(className: string, teams: Team[], ip?: string): Promise<Participant | null> {
+  const newParticipant = {
     className,
     teams,
     present: false,
     createdAt: new Date().toISOString(),
+    ip
   }
-  participants.push(participant)
-  return participant
+
+  const { data, error } = await supabase
+    .from('participants')
+    .insert([newParticipant])
+    .select()
+    .single()
+
+  if (error) {
+    console.error('Error adding participant:', error)
+    return null
+  }
+
+  return data as Participant
 }
 
-export function updateParticipantPresence(id: string, present: boolean): Participant | null {
-  const participant = participants.find((p) => p.id === id)
-  if (participant) {
-    participant.present = present
-    return participant
+export async function updateParticipantPresence(id: string, present: boolean): Promise<Participant | null> {
+  const { data, error } = await supabase
+    .from('participants')
+    .update({ present })
+    .eq('id', id)
+    .select()
+    .single()
+
+  if (error) {
+    console.error('Error updating participant presence:', error)
+    return null
   }
-  return null
+
+  return data as Participant
 }

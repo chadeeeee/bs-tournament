@@ -3,9 +3,10 @@ import { getParticipants, updateParticipantPresence } from "@/lib/data"
 
 export async function GET() {
   try {
-    const participants = getParticipants()
+    const participants = await getParticipants()
     return NextResponse.json(participants)
-  } catch {
+  } catch (error) {
+    console.error("Fetch participants error:", error)
     return NextResponse.json(
       { error: "Помилка отримання даних" },
       { status: 500 }
@@ -25,7 +26,7 @@ export async function PATCH(request: NextRequest) {
       )
     }
 
-    const participant = updateParticipantPresence(id, present)
+    const participant = await updateParticipantPresence(id, present)
 
     if (!participant) {
       return NextResponse.json(
@@ -35,7 +36,8 @@ export async function PATCH(request: NextRequest) {
     }
 
     return NextResponse.json(participant)
-  } catch {
+  } catch (error) {
+    console.error("Update participant error:", error)
     return NextResponse.json(
       { error: "Помилка оновлення" },
       { status: 500 }

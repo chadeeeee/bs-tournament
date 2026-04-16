@@ -45,7 +45,8 @@ export async function POST(request: NextRequest) {
 
 
     // Перевірка на клас (заборонити дублікати)
-    const classExists = getParticipants().some(p => p.className?.trim().toLowerCase() === className.trim().toLowerCase());
+    const allParticipants = await getParticipants();
+    const classExists = allParticipants.some(p => p.className?.trim().toLowerCase() === className.trim().toLowerCase());
     if (classExists) {
       return NextResponse.json(
         { error: "Цей клас вже зареєстрований. Можна зареєструвати лише один раз." },
@@ -56,7 +57,7 @@ export async function POST(request: NextRequest) {
     // Перевірка на IP
     const ip = getClientIp(request);
     if (ip) {
-      const exists = getParticipants().some(p => (p as any).ip === ip);
+      const exists = allParticipants.some(p => p.ip === ip);
       if (exists) {
         return NextResponse.json(
           { error: "Ви вже подали заявку з цього пристрою/IP." },
@@ -110,15 +111,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Додаємо ip до об'єкта (тимчасово через any, бо структура Participant не містить ip)
-    const participant = addParticipant(className.trim(), validTeams);
-    if (ip) (participant as any).ip = ip;
+    const participant = await addParticipant(className.trim(), validTeams, ip || undefined);
+
+    if (!participant) {
+      return NextResponse.json(
+        { error: "Помилка при збереженні даних" },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json(
       { message: "Успішна реєстрація", participant },
       { status: 201 }
     );
-  } catch {
+  } catch (error) {
+    console.error("Registration error:", error);
     return NextResponse.json(
       { error: "Помилка сервера" },
       { status: 500 }
