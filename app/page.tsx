@@ -1,12 +1,20 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { RegistrationForm } from "@/components/registration-form"
 import { SuccessModal } from "@/components/success-modal"
+import { AnnouncementModal } from "@/components/announcement-modal"
 import { Zap, Trophy, Star, Swords } from "lucide-react"
 
 export default function HomePage() {
   const [showModal, setShowModal] = useState(false)
+  const [showAnnouncement, setShowAnnouncement] = useState(false)
+
+  useEffect(() => {
+    // Show announcement after a brief delay
+    const timer = setTimeout(() => setShowAnnouncement(true), 500)
+    return () => clearTimeout(timer)
+  }, [])
 
   return (
     <main className="min-h-screen relative overflow-hidden">
@@ -69,6 +77,9 @@ export default function HomePage() {
 
       {/* Success Modal */}
       <SuccessModal open={showModal} onClose={() => setShowModal(false)} />
+      
+      {/* Starting Announcement Modal */}
+      <AnnouncementModal open={showAnnouncement} onClose={() => setShowAnnouncement(false)} />
     </main>
   )
 }

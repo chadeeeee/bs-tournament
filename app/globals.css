@@ -118,3 +118,12 @@
   animation: float 5.5s ease-in-out infinite;
   animation-delay: 1.5s;
 }
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
